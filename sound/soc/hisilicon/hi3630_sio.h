@@ -73,7 +73,6 @@ struct hi3630_sio_platform_data {
 	unsigned int	id;
 	bool		is_master;
 	bool		is_ctrl;
-	bool		is_pu;
 	unsigned int	pb_active;
 	unsigned int	active_count;
 };

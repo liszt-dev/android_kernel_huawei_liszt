@@ -60,12 +60,7 @@ static int hi3630_sio_reg_write(struct hi3630_sio_platform_data *pdata,
 				unsigned int reg,
 				unsigned int value)
 {
-	if (pdata->is_pu) {
-		writel(value, pdata->reg_base_addr + reg);
-	} else {
-		loge("%s asp is power down!!! write reg 0x%x val 0x%x!\n", __FUNCTION__, reg, value);
-	}
-
+	writel(value, pdata->reg_base_addr + reg);
 	return 0;
 }
 
@@ -94,8 +89,6 @@ static int sio_dai_startup(struct snd_pcm_substream *substream,
 				if (0 != ret) {
 					loge("couldn't enable regulators %d\n", ret);
 					return -ENOENT;
-				} else {
-					pdata->is_pu = true;
 				}
 #endif
 
@@ -195,7 +188,6 @@ static void sio_dai_shutdown(struct snd_pcm_substream *substream,
 			}
 err:
 #ifdef  REGULATOR_ENABLE
-			pdata->is_pu = false;
 			regulator_bulk_disable(1, &pdata->regu);
 #endif
 			mutex_unlock(&pdata->mutex);
@@ -568,7 +560,6 @@ int hi3630_sio_runtime_suspend(struct device *dev)
 	}
 
 #ifdef REGULATOR_ENABLE
-	pdata->is_pu = false;
 	regulator_bulk_disable(1, &pdata->regu);
 #endif
 #ifdef PINCTRL_ENABLE
@@ -638,7 +629,6 @@ int hi3630_sio_runtime_resume(struct device *dev)
 		dev_err(dev, "couldn't enable regulators %d\n", ret);
 	}
 	else {
-		pdata->is_pu = true;
 		dev_err(dev, "============== Enable regulators ===========\n");
 	}
 
