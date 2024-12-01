@@ -135,6 +135,7 @@ static const struct sensors_cmd_map sensors_cmd_map_tab[] = {
     {SENSORHUB_TYPE_STEP_DETECTOR,                  TAG_STEP_DETECTOR},
     {SENSORHUB_TYPE_STEP_COUNTER,                   TAG_STEP_COUNTER},
     {SENSORHUB_TYPE_GEOMAGNETIC_ROTATION_VECTOR,    TAG_GEOMAGNETIC_RV},
+    {SENSORHUB_TYPE_AIRPRESS,                       TAG_AIRPRESS},
     {SENSORHUB_TYPE_HANDPRESS,                      TAG_HANDPRESS},
     {SENSORHUB_TYPE_CAP_PROX,                       TAG_CAP_PROX}
 };
@@ -686,6 +687,7 @@ char* obj_tag_str[] = {
 	[TAG_STEP_DETECTOR] = "TAG_STEP_DETECTOR",
 	[TAG_STEP_COUNTER] = "TAG_STEP_COUNTER",
 	[TAG_GEOMAGNETIC_RV] = "TAG_GEOMAGNETIC_RV",
+        [TAG_AIRPRESS] = "TAG_AIRPRESS",
 	[TAG_HANDPRESS] = "TAG_HANDPRESS",
 	[TAG_CAP_PROX] = "TAG_CAP_PROX",
 	[TAG_TP] = "TAG_TP",
@@ -1845,7 +1847,7 @@ int inputhub_route_recv_mcu_data(const char *buf, unsigned int length)
 		hwlog_info("%s not report data for dt\n", __func__);
             return 0;
 	 }
-        if (head->tag == TAG_PRESSURE) {
+        if (head->tag == TAG_PRESSURE || head->tag == TAG_AIRPRESS) {
 //		hwlog_info("Kernel get airpress event %d, %d\n", event.value[0],event.value[1]);
             get_airpress_data = sensor_event->x;
             get_temperature_data = sensor_event->y;
